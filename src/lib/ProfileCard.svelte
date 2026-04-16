@@ -197,11 +197,12 @@
 
 <style>
   .profile-card {
-    border: 1px solid color-mix(in srgb, CanvasText 12%, transparent);
-    border-radius: 12px;
+    border: 0.5px solid var(--dt-color-border-subtle);
+    border-radius: var(--dt-radius-card);
     overflow: hidden;
-    background: Canvas;
-    color: CanvasText;
+    background: var(--dt-color-bg-elevated);
+    color: var(--dt-color-text-primary);
+    box-shadow: var(--dt-shadow-card);
     max-width: 100%;
   }
 
@@ -212,9 +213,9 @@
   .desktop-gallery {
     display: none;
     width: 100%;
-    gap: 0.5rem;
+    gap: var(--dt-space-sm);
     grid-template-columns: repeat(var(--profile-cols, 1), minmax(0, 1fr));
-    padding: 0.5rem;
+    padding: var(--dt-space-lg);
     box-sizing: border-box;
   }
 
@@ -222,7 +223,7 @@
     position: relative;
     aspect-ratio: 1;
     min-width: 0;
-    border-radius: 8px;
+    border-radius: var(--dt-radius-tile);
     overflow: hidden;
   }
 
@@ -242,19 +243,21 @@
     right: 0;
     bottom: 0;
     z-index: 1;
-    padding: 0.3rem 0.45rem;
-    font-size: 0.72rem;
-    line-height: 1.25;
+    padding: var(--dt-space-xs) var(--dt-space-sm);
+    font-family: var(--dt-font-body);
+    font-size: var(--dt-text-caption);
+    font-weight: var(--dt-font-weight-medium);
+    line-height: var(--dt-leading-snug);
     text-align: center;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.55);
+    color: var(--dt-color-text-on-media);
+    background: var(--dt-color-media-caption-bg);
     pointer-events: none;
     word-break: break-word;
   }
 
   .mobile-carousel {
     display: block;
-    padding: 0.5rem;
+    padding: var(--dt-space-lg);
     box-sizing: border-box;
   }
 
@@ -276,7 +279,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    border-radius: 8px;
+    border-radius: var(--dt-radius-tile);
     overflow: hidden;
   }
 
@@ -293,11 +296,11 @@
   .carousel-skeleton {
     position: absolute;
     inset: 0;
-    border-radius: 8px;
+    border-radius: var(--dt-radius-tile);
     pointer-events: none;
     z-index: 1;
     opacity: 0;
-    background: color-mix(in srgb, CanvasText 8%, Canvas);
+    background: color-mix(in srgb, var(--dt-color-text-primary) 12%, var(--dt-color-bg-app));
     transition: opacity 0.15s ease;
   }
 
@@ -339,15 +342,15 @@
     width: 2.25rem;
     height: 2.25rem;
     padding: 0;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
-    background: color-mix(in srgb, Canvas 92%, CanvasText 8%);
-    color: inherit;
+    border-radius: var(--dt-radius-full);
+    border: 0.5px solid var(--dt-color-border-subtle);
+    background: var(--dt-color-control-bg);
+    color: var(--dt-color-text-primary);
     cursor: pointer;
   }
 
   .nav:focus-visible {
-    outline: 2px solid color-mix(in srgb, CanvasText 55%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--dt-color-accent) 65%, transparent);
     outline-offset: 2px;
   }
 
@@ -368,16 +371,21 @@
 
   .title {
     margin: 0;
-    padding: 0.5rem 0.75rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
+    padding: var(--dt-space-md) var(--dt-space-md) 0;
+    font-family: var(--dt-font-display);
+    font-size: var(--dt-text-card-title);
+    font-weight: var(--dt-font-weight-semibold);
+    line-height: var(--dt-leading-snug);
+    color: var(--dt-color-text-primary);
   }
 
   .description {
     margin: 0;
-    padding: 0.35rem 0.75rem 0.75rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    opacity: 0.9;
+    padding: var(--dt-space-xs) var(--dt-space-md) var(--dt-space-md);
+    font-family: var(--dt-font-body);
+    font-size: var(--dt-text-card-subtitle);
+    font-weight: var(--dt-font-weight-regular);
+    line-height: var(--dt-leading-normal);
+    color: var(--dt-color-text-muted);
   }
 </style>

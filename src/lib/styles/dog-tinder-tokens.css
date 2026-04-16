@@ -1,0 +1,79 @@
+/**
+ * Dog Tinder — design tokens from Figma.
+ * Source: file vY3uBiaRMpPM4Rfho3624k, node 4:2514 (Figma MCP: get_design_context + get_variable_defs).
+ * Do not add Tailwind; use these custom properties in component CSS.
+ */
+
+:root {
+	/* —— Color —— */
+	--dt-color-bg-app: #0d0208;
+	--dt-color-bg-elevated: #0d0208;
+	--dt-color-text-primary: #e4d7de;
+	--dt-color-text-muted: rgba(235, 209, 222, 0.62);
+	--dt-color-text-on-media: #ffffff;
+	--dt-color-accent: #ff69b4;
+	--dt-color-border-subtle: rgba(182, 145, 163, 0.2);
+	--dt-color-gesture-bar: rgba(218, 129, 173, 0.09);
+	--dt-color-control-bg: rgba(255, 255, 255, 0.08);
+	--dt-color-media-caption-bg: rgba(0, 0, 0, 0.55);
+
+	/* —— Gradients (hero scrims in Figma) —— */
+	--dt-gradient-scrim-top: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.6) 0%,
+		rgba(0, 0, 0, 0) 100%
+	);
+	--dt-gradient-scrim-bottom: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 0, 0, 0.6) 100%
+	);
+
+	/* —— Shadow —— */
+	--dt-shadow-card: 0 2px 7px rgba(0, 0, 0, 0.08);
+	--dt-shadow-nav: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+	/* —— Radius —— */
+	--dt-radius-card: 22px;
+	--dt-radius-tile: 8px;
+	--dt-radius-pill: 24px;
+	--dt-radius-full: 999px;
+
+	/* —— Space —— */
+	--dt-space-xs: 4px;
+	--dt-space-sm: 8px;
+	--dt-space-md: 12px;
+	--dt-space-lg: 16px;
+
+	/* —— Typography (Figma: Outfit) —— */
+	--dt-font-display: "Outfit", system-ui, sans-serif;
+	--dt-font-body: var(--dt-font-display);
+	--dt-font-weight-regular: 400;
+	--dt-font-weight-medium: 500;
+	--dt-font-weight-semibold: 600;
+	--dt-text-hero: 1.75rem;
+	--dt-text-card-title: 0.9375rem;
+	--dt-text-card-subtitle: 0.8125rem;
+	--dt-text-chip: 0.9375rem;
+	--dt-text-caption: 0.72rem;
+	--dt-text-meta: 0.6875rem;
+	--dt-leading-snug: 1.35;
+	--dt-leading-normal: 1.4;
+
+	/* —— Figma variable: Background Blur —— */
+	--dt-backdrop-blur-screen: 50px;
+}
+
+html {
+	color-scheme: dark;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	background: var(--dt-color-bg-app);
+	color: var(--dt-color-text-primary);
+	font-family: var(--dt-font-body);
+	font-weight: var(--dt-font-weight-regular);
+	line-height: var(--dt-leading-normal);
+}
