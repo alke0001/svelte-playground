@@ -1,0 +1,31 @@
+---
+description: >-
+  Projektweite Arbeitsregeln für den KI-Assistenten in svelte-playground:
+  Skills lesen, Scope disziplinieren, Qualität und Sicherheit. Gilt für alle
+  Aufgaben in diesem Repository.
+alwaysApply: true
+---
+
+# Agent — svelte-playground
+
+## Skills zuerst
+
+- Vor inhaltlichen Änderungen an **UI, Routen, Loads, Formularen oder APIs** die Datei `.cursor/skills/svelte-playground-frontend/SKILL.md` lesen und befolgen.
+- Bei **Deployment, Vercel, CI, Git-Remotes, Branches oder Repo-Operationen** `.cursor/skills/svelte-playground-devops/SKILL.md` lesen und befolgen (insbesondere die harten Regeln zu Commit/Push).
+
+## Regeln vs. Skills
+
+- **Diese Datei** (`.cursor/rules/*.mdc`): kurze, projektweite oder dateibezogene Policy — immer zuerst beachten.
+- **Skills**: vertiefende Arbeitsanweisungen; bei passendem Thema explizit einbeziehen, nicht duplizieren.
+
+## Arbeitsweise
+
+- Nur den **gefragten Umfang** ändern: keine mitgelieferten Refactors, keine neuen Doc-Dateien ohne Auftrag.
+- **Vorhandenen Stil** in `src/lib` und `src/routes` übernehmen (Importe, Typen, Komponentenmuster).
+- **Kommentare im Quellcode** auf Englisch, kurz und nur wo nötig (Details siehe Frontend-Skill).
+- **Nachweis**: bei substanziellen Änderungen `npm run check` aus dem Repo-Root ausführen und gemeldete Probleme beheben.
+- **Terminal**: Befehle selbst ausführen; bei Fehlschlägen alternative Wege versuchen oder diagnostizieren, nicht nach einem Versuch aufgeben.
+
+## Sicherheit und Geheimnisse
+
+- Keine Secrets in den Client-Bundle schieben; Server-only über `$env/.../private` (siehe Frontend-Skill).

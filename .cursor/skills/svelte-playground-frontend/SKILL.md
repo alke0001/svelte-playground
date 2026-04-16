@@ -1,14 +1,19 @@
 ---
 name: svelte-playground-frontend
 description: >-
-  Builds Svelte 5 UI and SvelteKit 2 backend-for-frontend in TypeScript for
-  svelte-playground: components under src/lib, routes under src/routes, typed
-  loads, form actions, and +server.ts API proxies. Code comments in English,
-  short plain language. Use when adding or changing components, pages, data
-  fetching, forms, or external API integration in this repo.
+  Defines Svelte 5 and SvelteKit 2 UI and BFF conventions for svelte-playground:
+  components under src/lib, routes under src/routes, typed loads, form actions,
+  and +server.ts API proxies. English source comments, short plain language. Use
+  when adding or changing components, pages, data fetching, forms, or external
+  API integration in this repository.
 ---
 
 # Svelte Playground — Frontend & BFF
+
+## Cursor: rules and this skill
+
+- Project-wide agent policy lives in `.cursor/rules/` (`.mdc`). Follow those first.
+- This file adds **Svelte/SvelteKit-specific** detail; load it when the task touches UI, routes, or BFF code here.
 
 ## Scope
 

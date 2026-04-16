@@ -1,13 +1,18 @@
 ---
 name: svelte-playground-devops
 description: >-
-  DevOps workflow for this SvelteKit (Vite) repo on GitHub with Vercel: branch
-  previews, production vs preview URLs, and strict Git rules. Use when the
-  user or task touches deployment, CI, Vercel, Git remotes, branches, or
-  repository operations for svelte-playground.
+  Describes the DevOps workflow for this SvelteKit (Vite) repository on GitHub
+  with Vercel: branch previews, production vs preview URLs, and strict Git
+  rules for agents. Use when the user or task touches deployment, CI, Vercel,
+  Git remotes, branches, or repository operations for svelte-playground.
 ---
 
 # Svelte Playground — DevOps & Vercel
+
+## Cursor: rules and this skill
+
+- Project-wide agent policy lives in `.cursor/rules/` (`.mdc`). Follow those first.
+- This file covers **GitHub/Vercel/Git**; load it when deployment or repo operations are involved.
 
 ## Hard rules for agents
 
