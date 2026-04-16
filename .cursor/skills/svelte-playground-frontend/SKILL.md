@@ -3,9 +3,9 @@ name: svelte-playground-frontend
 description: >-
   Builds Svelte 5 UI and SvelteKit 2 backend-for-frontend in TypeScript for
   svelte-playground: components under src/lib, routes under src/routes, typed
-  loads, form actions, and +server.ts API proxies. Use when adding or changing
-  components, pages, data fetching, forms, or external API integration in this
-  repo.
+  loads, form actions, and +server.ts API proxies. Code comments in English,
+  short plain language. Use when adding or changing components, pages, data
+  fetching, forms, or external API integration in this repo.
 ---
 
 # Svelte Playground — Frontend & BFF
@@ -22,6 +22,11 @@ For **Git, Vercel, or deployment**, use the project skill `svelte-playground-dev
 - **Stack:** `svelte` ^5, `@sveltejs/kit` ^2, Vite, TypeScript.
 - **Shared UI:** `src/lib/` (import via `$lib/...`). Re-export public components from `src/lib/index.ts` when the barrel file is already in use for exports.
 - **Routes:** `src/routes/` (`+page.svelte`, `+layout.svelte`, `+page.server.ts`, `+server.ts`, etc.).
+
+## Code comments
+
+- Write **comments in English** only, short and plain (easy words). No German in source comments.
+- Use them for **non-obvious** choices (e.g. why `loading="eager"` or a specific `$effect` exists), not for obvious code.
 
 ## Component work
 
