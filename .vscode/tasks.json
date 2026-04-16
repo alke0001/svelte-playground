@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev:start",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*VITE.*ready.*",
+          "endsPattern": "^.*ready in.*"
+        }
+      }
+    },
+    {
+      "label": "dev:stop",
+      "type": "shell",
+      "command": "taskkill",
+      "args": ["/IM", "node.exe", "/F"],
+      "windows": {
+        "command": "taskkill",
+        "args": ["/IM", "node.exe", "/F"]
+      },
+      "osx": {
+        "command": "pkill",
+        "args": ["-f", "vite"]
+      },
+      "linux": {
+        "command": "pkill",
+        "args": ["-f", "vite"]
+      },
+      "isBackground": false
+    }
+  ]
+}
