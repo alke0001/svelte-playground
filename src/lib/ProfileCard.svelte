@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from "svelte";
-  import { resolveProfilePictureUrls } from "$lib/profilePictureSources";
+  import { resolveProfilePictureSlides } from "$lib/profilePictureSources";
 
   /**
    * Public API: the parent (e.g. +page.svelte) passes props to configure each instance.
@@ -21,7 +21,7 @@
     shortDescription?: string;
   } = $props();
 
-  const resolvedUrls = $derived(resolveProfilePictureUrls(pictureFolder));
+  const resolvedSlides = $derived(resolveProfilePictureSlides(pictureFolder));
 
   let currentIndex = $state(0);
 
@@ -37,7 +37,7 @@
 
   // Warm prev/next URLs so arrow taps often hit the browser cache (not a Svelte feature — plain Image()).
   $effect(() => {
-    const list = resolvedUrls;
+    const list = resolvedSlides;
     const i = currentIndex;
     if (list.length < 2) return;
 
@@ -45,7 +45,7 @@
     const warm = (idx: number) => {
       const img = new Image();
       img.decoding = "async";
-      img.src = list[idx]!;
+      img.src = list[idx]!.url;
     };
 
     warm((i + 1) % n);
@@ -54,7 +54,7 @@
 
   // On slide change: mark busy, then after DOM flush check img.complete (cached files may not fire load).
   $effect(() => {
-    const list = resolvedUrls;
+    const list = resolvedSlides;
     const i = currentIndex;
     void list;
     void i;
@@ -82,20 +82,20 @@
   }
 
   function showPrev() {
-    const n = resolvedUrls.length;
+    const n = resolvedSlides.length;
     if (n < 2) return;
     currentIndex = (currentIndex - 1 + n) % n;
   }
 
   function showNext() {
-    const n = resolvedUrls.length;
+    const n = resolvedSlides.length;
     if (n < 2) return;
     currentIndex = (currentIndex + 1) % n;
   }
 
   // Grid column count for the desktop strip (1–3). Same list drives mobile carousel.
-  const gridColumns = $derived(Math.min(resolvedUrls.length, 3));
-  const showCarouselNav = $derived(resolvedUrls.length > 1);
+  const gridColumns = $derived(Math.min(resolvedSlides.length, 3));
+  const showCarouselNav = $derived(resolvedSlides.length > 1);
 </script>
 
 <article class="profile-card">
@@ -105,16 +105,19 @@
       style="--profile-cols: {gridColumns}"
       aria-label="Profile photos for {userName}"
     >
-      {#each resolvedUrls as url, i (`${i}-${url}`)}
+      {#each resolvedSlides as slide, i (`${i}-${slide.url}`)}
         <!-- First tile: not lazy — start the main desktop image early. Other tiles stay lazy. -->
-        <img
-          class="tile"
-          src={url}
-          alt="Profile photo {i + 1} of {userName}"
-          loading={i === 0 ? "eager" : "lazy"}
-          decoding="async"
-          fetchpriority={i === 0 ? "high" : "low"}
-        />
+        <div class="tile-slot">
+          <img
+            class="tile"
+            src={slide.url}
+            alt="{slide.caption} — {userName}"
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchpriority={i === 0 ? "high" : "low"}
+          />
+          <div class="image-caption">{slide.caption}</div>
+        </div>
       {/each}
     </div>
 
@@ -144,19 +147,26 @@
 
         <div class="carousel-view">
           <div class="carousel-skeleton" aria-hidden="true"></div>
-          <!-- Visible on small screens: eager + high priority so the hero image is not deferred by lazy loading. -->
-          <img
-            bind:this={carouselImgEl}
-            class="carousel-img"
-            class:carousel-img--hidden={showCarouselNav && !carouselSlideReady}
-            src={resolvedUrls[currentIndex]}
-            alt="Profile photo {currentIndex + 1} of {userName}"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-            onload={onCarouselImgLoad}
-            onerror={onCarouselImgError}
-          />
+          <div
+            class="carousel-stage"
+            class:carousel-stage--hidden={showCarouselNav && !carouselSlideReady}
+          >
+            <!-- Visible on small screens: eager + high priority so the hero image is not deferred by lazy loading. -->
+            <img
+              bind:this={carouselImgEl}
+              class="carousel-img"
+              src={resolvedSlides[currentIndex].url}
+              alt="{resolvedSlides[currentIndex].caption} — {userName}"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              onload={onCarouselImgLoad}
+              onerror={onCarouselImgError}
+            />
+            <div class="image-caption">
+              {resolvedSlides[currentIndex].caption}
+            </div>
+          </div>
         </div>
 
         {#if showCarouselNav}
@@ -208,12 +218,38 @@
     box-sizing: border-box;
   }
 
-  .tile {
-    width: 100%;
+  .tile-slot {
+    position: relative;
     aspect-ratio: 1;
-    object-fit: cover;
+    min-width: 0;
     border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .tile {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
+  }
+
+  /* Filename-based label; dark scrim so text stays readable on busy photos. */
+  .image-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.72rem;
+    line-height: 1.25;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: none;
+    word-break: break-word;
   }
 
   .mobile-carousel {
@@ -234,6 +270,24 @@
     flex: 1;
     min-width: 0;
     aspect-ratio: 1;
+  }
+
+  .carousel-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .carousel-stage--hidden .carousel-img,
+  .carousel-stage--hidden .image-caption {
+    opacity: 0;
+  }
+
+  .carousel-img,
+  .image-caption {
+    transition: opacity 0.12s ease;
   }
 
   .carousel-skeleton {
@@ -274,13 +328,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
     display: block;
-    transition: opacity 0.12s ease;
-  }
-
-  .carousel-img--hidden {
-    opacity: 0;
   }
 
   .nav {

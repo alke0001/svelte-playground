@@ -1,6 +1,6 @@
 // import.meta.glob is resolved at Vite build time (static map path -> URL).
-// We build a folder -> URLs index once when this module loads (not on every $derived tick).
-// That is still "runtime" once at startup, but O(1) per lookup; the heavy work is image bytes in the network, not this map.
+// We build a folder -> slides index once when this module loads (not on every $derived tick).
+// Captions come from the source file name (Vite output URLs may not keep the original name).
 import defaultProfileImage from "$lib/assets/profile_pictures/default_profileImage.jpg?url";
 
 const allImages = import.meta.glob("$lib/assets/profile_pictures/**/*.{jpg,jpeg,png,webp}", {
@@ -20,9 +20,24 @@ const MAX_IMAGES = 3;
 
 const PROFILE_MARKER = "/profile_pictures/";
 
+export type ProfilePictureSlide = {
+	readonly url: string;
+	readonly caption: string;
+};
+
 function fileNameFromPath(path: string): string {
 	const i = path.lastIndexOf("/");
 	return i === -1 ? path : path.slice(i + 1);
+}
+
+/** Human label: drop extension, turn underscores into spaces (e.g. Ich_Privat_ganz_lässig.jpg). */
+export function captionFromFileName(fileName: string): string {
+	const noExt = fileName.replace(/\.(jpe?g|png|webp)$/i, "");
+	return noExt.replaceAll("_", " ");
+}
+
+function captionFromSourcePath(path: string): string {
+	return captionFromFileName(fileNameFromPath(path));
 }
 
 /** Folder name under profile_pictures, or null for files sitting directly in that root. */
@@ -40,9 +55,9 @@ function isDefaultProfileFile(path: string): boolean {
 	return base === "default_profileimage.jpg";
 }
 
-function buildUrlsByFolder(
+function buildSlidesByFolder(
 	entries: { path: string; url: string }[]
-): ReadonlyMap<string, readonly string[]> {
+): ReadonlyMap<string, readonly ProfilePictureSlide[]> {
 	const buckets = new Map<string, { path: string; url: string }[]>();
 
 	for (const entry of entries) {
@@ -59,7 +74,7 @@ function buildUrlsByFolder(
 		list.push(entry);
 	}
 
-	const out = new Map<string, readonly string[]>();
+	const out = new Map<string, readonly ProfilePictureSlide[]>();
 
 	for (const [folder, list] of buckets) {
 		const sorted = [...list].sort((a, b) =>
@@ -67,31 +82,41 @@ function buildUrlsByFolder(
 				sensitivity: "base"
 			})
 		);
-		const urls = sorted.slice(0, MAX_IMAGES).map((m) => m.url);
-		out.set(folder, urls);
+		const slides: ProfilePictureSlide[] = sorted.slice(0, MAX_IMAGES).map((m) => ({
+			url: m.url,
+			caption: captionFromSourcePath(m.path)
+		}));
+		out.set(folder, slides);
 	}
 
 	return out;
 }
 
-const urlsByFolder = buildUrlsByFolder(normalizedEntries);
+const slidesByFolder = buildSlidesByFolder(normalizedEntries);
+
+const DEFAULT_SLIDE: ProfilePictureSlide = {
+	url: DEFAULT_PROFILE_PICTURE_URL,
+	caption: captionFromFileName("default_profileImage.jpg")
+};
 
 /**
- * Up to three image URLs for `src/lib/assets/profile_pictures/<folder>/`.
- * Missing folder, empty folder, or no images → `[DEFAULT_PROFILE_PICTURE_URL]`.
+ * Up to three slides for `src/lib/assets/profile_pictures/<folder>/`.
+ * Missing folder, empty folder, or no images → default slide only.
  */
-export function resolveProfilePictureUrls(pictureFolder: string | undefined): string[] {
+export function resolveProfilePictureSlides(
+	pictureFolder: string | undefined
+): ProfilePictureSlide[] {
 	const folder = pictureFolder?.trim();
 	if (!folder) {
-		return [DEFAULT_PROFILE_PICTURE_URL];
+		return [DEFAULT_SLIDE];
 	}
 
-	const urls = urlsByFolder.get(folder);
-	if (!urls || urls.length === 0) {
-		return [DEFAULT_PROFILE_PICTURE_URL];
+	const slides = slidesByFolder.get(folder);
+	if (!slides || slides.length === 0) {
+		return [DEFAULT_SLIDE];
 	}
 
-	return [...urls];
+	return [...slides];
 }
 
 export { DEFAULT_PROFILE_PICTURE_URL };

@@ -2,7 +2,7 @@
   import ProfileCard from "$lib/ProfileCard.svelte";
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<h1>Dog Tinder</h1>
 
 <div class="demo-grid">
   <ProfileCard
@@ -18,7 +18,13 @@
   />
 
   <ProfileCard
-    userName="Nur Default"
+    pictureFolder="charles_mega"
+    userName="Charles Mega"
+    shortDescription="Erste drei Bilder aus dem Ordner charles_mega."
+  />
+
+  <ProfileCard
+    userName="Max Mustermann"
     shortDescription="Kein pictureFolder — Fallback-Bild."
   />
 </div>
