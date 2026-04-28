@@ -13,8 +13,8 @@
 
   let {
     pictureFolder,
-    userName = "Nutzer",
-    shortDescription
+    userName,
+    shortDescription = "profile description default/watermark text",
   }: {
     pictureFolder?: string;
     userName?: string;
@@ -149,7 +149,8 @@
           <div class="carousel-skeleton" aria-hidden="true"></div>
           <div
             class="carousel-stage"
-            class:carousel-stage--hidden={showCarouselNav && !carouselSlideReady}
+            class:carousel-stage--hidden={showCarouselNav &&
+              !carouselSlideReady}
           >
             <!-- Visible on small screens: eager + high priority so the hero image is not deferred by lazy loading. -->
             <img
